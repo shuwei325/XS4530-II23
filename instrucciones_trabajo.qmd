@@ -1,0 +1,36 @@
+---
+title: "Instrucciones para el trabajo"
+format: html
+editor: visual
+---
+
+##
+
+## Instrucciones y recomendaciones para la entrega del trabajo:
+
+- El objetivo de este trabajo es poner en práctica los métodos de pronósticos vistos en este curso y se permite grupo de máximo 3 integrantes.
+
+- La fecha de entrega es el lunes 30 de octubre a las 23:59 horas (medianoche) vía Mediación Virtual. Solamente es necesario una entrega por grupo. No se aceptarán trabajos por correo electrónico, ni por cualquier otro medio.
+
+- El reporte debe venir las siguientes secciones:
+
+  1.  Resumen (abstracts)
+
+  2.  Introducción (incluir una descripción del trabajo y el objetivo del análisis)
+
+  3.  Metodología (describir la serie, explicar las metodologías utilizadas y su justificación)
+
+  4.  Resultados y discusión (presentar los análisis realizados, diagnósticos y comparaciones de modelos)
+
+  5.  Conclusión
+
+  6.  Referencias
+
+- Recuerde que ustedes están entregando un reporte con un mensaje, asegúrense de dejar claro ese mensaje y responder la pregunta de su objetivo utilizando tablas y/o gráficos según vea necesario.
+
+
+## A continuación se presenta el caso a analizar y los pasos que deben seguir para realizar el análisis.
+
+
+
+
