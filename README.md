@@ -14,10 +14,8 @@ Profesor: Shu Wei Chou Chen (<shuwei.chou@ucr.ac.cr>)
 
 # Cronograma:
 
-| Semana | Fecha | Clase y actividad                    | Laboratorio y Materiales extras |
+| Semana | Fecha | Clase y actividad                                                              | Laboratorio y Materiales extras |
 |------------|------|------|--------------------------------------------------|
-| 1      | 16/10 | [Tema 1](./Tema_1/presentacion.html) |                                 |
-| ^^     | ^^    | [Tema 2](./Tema_2/presentacion.html) | [Laboratorio1]()                |
-| 2      | 23/10 | [Tema 3](./Tema_3/presentacion.html) |                                 |
-| ^^     | ^^    | [Tema 4](./Tema_4/presentacion.html) | [Laboratorio2]()                |
-| 3      | 30/10 | Entrega del reporte (vía)            |                                 |
+| 1      | 16/10 | [Tema 1](./Tema_1/presentacion.html) <br> [Tema 2](./Tema_2/presentacion.html) | [Laboratorio1]()                |
+| 2      | 23/10 | [Tema 3](./Tema_3/presentacion.html) <br> [Tema 4](./Tema_4/presentacion.html) | [Laboratorio2]()                |
+| 3      | 30/10 | Entrega del reporte (vía)                                                      |                                 |
