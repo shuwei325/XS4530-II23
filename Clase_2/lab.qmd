@@ -1,0 +1,366 @@
+---
+title: "Tema 2.3. Series de tiempo para pronóstico. Laboratorio 2"
+subtitle: "Curso: Decisiones Estadísticas y Administrativas"
+author: 
+  name: "Shu Wei Chou Chen"
+  affiliation: "Escuela de Estadística, UCR"
+format: 
+  html:
+    theme: 
+      light: [sketchy, code_font_light.scss]
+      dark: [sketchy, code_font_dark.scss]
+lang: es
+editor: visual
+toc: true
+toc-depth: 3
+toc-location: left
+toc-title: "Contenido"
+toc-expand: 1
+number-sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# librerías
+
+```{r , message=FALSE , warning=FALSE}
+library(ggplot2)
+library(forecast)
+library(fpp2)
+library(plotly)
+library(car)
+library(astsa)
+```
+
+# Suavizamiento exponencial simple
+
+## Serie mensual de defunciones de Costa Rica de los años 2001 y 2002.
+
+```{r}
+defunciones<-read.csv("defunciones.csv",sep=",")
+y<-ts(defunciones$defunciones,start=c(2001,1),frequency=12)
+autoplot(y) 
+ses1 <- ses(y,alpha=0.3,initial="simple")
+names(ses1)
+ses1$model
+ses1$fitted #valores ajustados
+ses1$residuals #residuos
+```
+
+
+
+## Estimación de alpha
+```{r}
+alpha<-seq(0,1,0.01)
+rmse<-as.numeric()
+for(i in 1:length(alpha)){
+  ses1 <- ses(y,alpha=alpha[i],initial="simple")
+  rmse[i]<-accuracy(ses1)[2]
+}
+rmse
+plot(alpha,rmse,type = "l")
+alpha[rmse==min(rmse)]
+abline(v=alpha[rmse==min(rmse)])
+```
+
+
+
+```{r}
+ses2 <- ses(y,h=12,initial="simple")
+names(ses2)
+ses2$model
+ses2
+
+autoplot(ses2)
+
+autoplot(ses2) +
+  autolayer(fitted(ses2), series="ajustado") +
+  ylab("defunciones") + xlab("mes")
+```
+
+
+#  Método de Holt
+## Serie de graduados del ITCR de 1975-2002.
+
+```{r}
+itcrgrad<-read.csv("ITCR.csv",sep=",")
+y<-ts(itcrgrad$graduados,start=1975)
+autoplot(y) 
+holt1 <- holt(y,alpha=0.3 ,beta=0.64 , h=5, initial="simple")
+holt1
+```
+
+```{r}
+names(holt1)
+holt1$model
+holt1$mean # pronóstico con 5 pasos para adelante.
+holt1$x # serie original
+holt1$fitted # valores ajustados
+```
+
+
+```{r}
+holt2 <- holt(y , h=5, initial="simple")
+holt2
+names(holt2)
+holt2$model
+
+cbind(y,holt2$fitted)
+
+autoplot(holt2) +
+  autolayer(fitted(holt2), series="ajustado") +
+  ylab("defunciones") + xlab("mes")
+```
+
+## Estimación de alpha y beta
+
+
+```{r}
+alpha<-seq(0,1,0.01)
+beta<-seq(0,1,0.01)
+rmse<-matrix(NA,nrow=length(alpha),ncol=length(beta))
+for(i in 1:length(alpha)){
+  for(j in 1:length(beta)){
+    ses1 <- holt(y,alpha=alpha[i],beta=beta[j],initial="simple")
+    rmse[i,j]<-accuracy(ses1)[2]
+  }
+}
+dim(rmse)
+rmse[1:5,1:5]
+rownames(rmse)<-alpha
+colnames(rmse)<-beta
+```
+
+
+```{r}
+p <- plot_ly(z = rmse,x=alpha,y=beta, type = "surface")
+p %>% layout(scene = list(xaxis = list(title = 'alpha'),
+                          yaxis = list(title = 'beta'),
+                          zaxis = list(title = 'rmse')))
+```
+
+
+```{r}
+par.min<-which(rmse==min(rmse),arr.ind=TRUE)
+(alpha.min<-alpha[par.min[1]])
+(beta.min<-beta[par.min[2]])
+holt1<-holt(y,alpha=alpha.min,beta=beta.min , initial="simple")
+holt1$model
+accuracy(holt1)
+
+holt2<-holt(y , initial="simple")
+holt2$model
+accuracy(holt2)                  #minimo local
+
+holt3<-holt(y , initial="optimal")
+holt3$model
+accuracy(holt3)
+```
+
+
+## Comparación Holt - Holt amortiguado
+```{r}
+fc <- holt(y, h=15)
+fc2 <- holt(y, damped=TRUE, h=15)
+fc2$model
+
+ggplot2::autoplot(y) +
+  autolayer(fc, series="Holt", PI=FALSE) +
+  autolayer(fc2, series="Holt amortiguado", PI=FALSE) +
+  ggtitle('Pronóstico usando método Holt-Holt amortiguado') + xlab("Año") +
+  ylab("Graduados del ITCR (1975-2002)") +
+  guides(colour=guide_legend(title="Pronóstico"))
+```
+
+
+
+# Método multiplicativo de Holt-Winters 
+
+```{r}
+turistas<-read.csv("turistas.csv",sep=";")
+y<-ts(turistas$turistas,start=c(1991,1),frequency=12)
+ts.plot(y)
+
+ht1 <- hw(y,seasonal="multiplicative")
+names(ht1)
+ht1$model
+
+ht2 <- hw(y,seasonal="additive")
+ht2$model
+
+```
+
+```{r}
+autoplot(y) +
+  autolayer(ht1, series="HW multiplicativo", PI=FALSE, size = 1.2) +
+  autolayer(ht2, series="HW aditivo", PI=FALSE, size = 1.2) +
+  xlab("fecha") +
+  ylab("turistas") +
+  ggtitle("Turistas que ingresaron a CR") +
+  guides(colour=guide_legend(title="pronóstico"))
+
+accuracy(ht1)
+accuracy(ht2)
+
+
+
+```
+
+
+
+# Modelo de Regresión
+
+Cambios porcentuales trimestrales (tasas de crecimiento) del gasto de consumo personal real (Y) e ingresos disponibles(X), para EE.UU. desde 1970 a 2016.
+
+```{r}
+data(uschange)
+
+autoplot(uschange[,1:5], facets = TRUE, colour=TRUE) +
+  ylab("") + xlab("Year") +
+  guides(colour="none")
+
+uschange %>%
+  as.data.frame() %>%
+  GGally::ggpairs()
+
+mod0 <- lm(
+  Consumption ~ Income + Production + Unemployment + Savings,
+  data=uschange)
+summary(mod0)
+
+mod0 <- tslm(
+  Consumption ~ Income + Production + Unemployment + Savings,
+  data=uschange)
+summary(mod0)
+
+
+autoplot(uschange[,'Consumption'], series="Data") +
+  forecast::autolayer(fitted(mod0), series="Fitted") +
+  xlab("Year") + ylab("") +
+  ggtitle("Cambio porcentual de gastos de consumo en EE.UUU ") +
+  guides(colour=guide_legend(title=" "))
+
+checkresiduals(mod0)
+```
+
+# Modelos de tendencia
+
+## Ejemplo con graduados de ITCR de 1975 a 2002
+
+```{r}
+itcrgrad<-read.csv("ITCR.csv",sep=",")
+y<-ts(itcrgrad$graduados,start=1975)
+autoplot(y) 
+```
+
+## Crear variables independientes
+
+```{r}
+tiempo<-seq(1,length(y))
+tiempo2<-tiempo^2
+
+datos.itcrgrad<-data.frame(y,tiempo,tiempo2)
+
+mod1<-lm(y~tiempo+tiempo2,datos.itcrgrad)
+summary(mod1)
+
+mod.ts1<-tslm(y~trend+trend^2) #note la salida no incluye al tendencia al cuadrado.
+summary(mod.ts1)
+mod.ts2<-tslm(y~trend+I(trend^2))
+summary(mod.ts2)
+
+par(mfrow = c(1,1))
+e<-mod1$residuals
+```
+
+## Normalidad
+
+```{r}
+hist(e)
+shapiro.test(e)
+```
+
+## Homoscedasticidad
+
+```{r}
+ts.plot(e)
+lmtest::bptest(mod1)
+```
+
+## Autocorrelación
+
+```{r}
+lag1.plot(e)
+acf(mod1$residuals)
+durbinWatsonTest(mod1) #solamente considera un rezago
+checkresiduals(mod1)
+```
+
+# Regresión con series estacionales
+
+```{r}
+turistas<-read.csv("turistas.csv",sep=";")
+y<-ts(turistas$turistas,start=c(1991,1),frequency=12)
+```
+
+## transformacion logarítmica
+
+```{r}
+w<-log(y)
+autoplot(y) 
+autoplot(w)
+
+tiempo<-seq(1,length(y))
+tiempo2<-tiempo^2
+mes<-rep(seq(1,12),10)
+mes<-as.factor(mes)
+
+datos1<-data.frame(w,tiempo,tiempo2,mes)
+mod1<-lm(w~tiempo+tiempo2+mes,datos1)
+summary(mod1)
+levels(datos1$mes)
+
+datos2 <- within(datos1, mes <- relevel(mes, ref = 12))
+levels(datos2$mes)
+mod2 <- lm(w~tiempo+tiempo2+mes,datos2)
+summary(mod2)
+
+```
+
+## Pronóstico
+
+```{r}
+mod1<-lm(w~tiempo+tiempo2+mes,datos1)
+summary(mod1)
+try(
+pronostico<-forecast(mod1) #error
+)
+
+mod3<-tslm(w~trend+I(trend^2)+season)
+summary(mod3)
+pronostico<-forecast(mod3,h=12)
+pronostico
+
+autoplot(w) +
+  ylab("ln Y") +
+  autolayer(mod3$fitted.values, series = "ajustado") +
+  autolayer(pronostico, series = "pronostico")
+
+checkresiduals(mod3)
+```
+
+```{r}
+y<-ts(turistas$turistas,start=c(1991,1),frequency=12)
+y.train<-window(y,start=c(1991,1),end=c(1999,12))
+y.test<-window(y,start=c(2000,1),end=c(2000,12))
+mod4<-tslm(y.train~trend+I(trend^2)+season)
+summary(mod4)
+pronostico<-forecast(mod4,h=12)
+pronostico
+accuracy(pronostico)
+accuracy(pronostico,y.test)
+
+```
+
