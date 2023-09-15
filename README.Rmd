@@ -23,8 +23,8 @@ Profesor: Shu Wei Chou Chen (shuwei.chou@ucr.ac.cr)
 
 Semana        |Fecha  | Clase y actividad | Laboratorio y Materiales extras
 ------------- | ----- | ----- | ------------------------------------------------------------
-1             | 16/10 |[Tema 1](./Tema_1/presentacion.html) <br> [Tema 2](./Tema_2/presentacion.html) |    [Laboratorio1]()                |
-2             | 23/10 |[Tema 3](./Tema_3/presentacion.html) <br> [Tema 4](./Tema_4/presentacion.html) |      [Laboratorio2]()             |
+1            | 16/10 |[Clase 1](./Clase_1/presentacion.html) |[Laboratorio1](./Clase_1/lab.html)                |
+2             | 23/10 |[Tema 3](./Clase_2/presentacion.html)  | [Laboratorio2]((./Clase_2/lab.html))             |
 3             | 30/10 | Entrega del reporte (vía) |                             |
 
 

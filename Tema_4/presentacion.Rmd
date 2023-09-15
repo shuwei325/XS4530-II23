@@ -1,5 +1,5 @@
 ---
-title: "Tema 2: Método de descomposición de series"
+title: "Tema 2.3. Series de tiempo para pronóstico"
 subtitle: "Curso: Decisiones Estadísticas y Administrativas"
 author: "Prof. Shu Wei Chou Chen"
 institute: "Escuela de Estadística, UCR"
