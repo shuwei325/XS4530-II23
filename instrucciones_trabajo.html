@@ -34,6 +34,8 @@ ul.task-list li input[type="checkbox"] {
 <link href="instrucciones_trabajo_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="instrucciones_trabajo_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -63,22 +65,34 @@ ul.task-list li input[type="checkbox"] {
 <section id="instrucciones-y-recomendaciones-para-la-entrega-del-trabajo" class="level2">
 <h2 class="anchored" data-anchor-id="instrucciones-y-recomendaciones-para-la-entrega-del-trabajo">Instrucciones y recomendaciones para la entrega del trabajo:</h2>
 <ul>
-<li><p>El objetivo de este trabajo es poner en práctica los métodos de pronósticos vistos en este curso y se permite grupo de máximo 3 integrantes.</p></li>
+<li><p>El objetivo de este trabajo es poner en práctica los métodos de pronósticos vistos en este curso y se permite grupo de máximo 4 integrantes.</p></li>
 <li><p>La fecha de entrega es el lunes 30 de octubre a las 23:59 horas (medianoche) vía Mediación Virtual. Solamente es necesario una entrega por grupo. No se aceptarán trabajos por correo electrónico, ni por cualquier otro medio.</p></li>
 <li><p>El reporte debe venir las siguientes secciones:</p>
 <ol type="1">
-<li><p>Resumen (abstracts)</p></li>
-<li><p>Introducción (incluir una descripción del trabajo y el objetivo del análisis)</p></li>
-<li><p>Metodología (describir la serie, explicar las metodologías utilizadas y su justificación)</p></li>
-<li><p>Resultados y discusión (presentar los análisis realizados, diagnósticos y comparaciones de modelos)</p></li>
-<li><p>Conclusión</p></li>
-<li><p>Referencias</p></li>
+<li>Introducción (Contexto del problema).</li>
+<li>Metodología (describir la serie, explicar las metodologías utilizadas y su justificación).</li>
+<li>Resultados (presentar los análisis realizados, diagnósticos y comparaciones de modelos)</li>
+<li>Conclusión y recomendación</li>
 </ol></li>
-<li><p>Recuerde que ustedes están entregando un reporte con un mensaje, asegúrense de dejar claro ese mensaje y responder la pregunta de su objetivo utilizando tablas y/o gráficos según vea necesario.</p></li>
+<li><p>Recuerde que ustedes están entregando un reporte con un mensaje, asegúrense de dejar claro ese mensaje y responder la pregunta de su objetivo utilizando tablas y/o gráficos según consideren necesario.</p></li>
 </ul>
 </section>
-<section id="a-continuación-se-presenta-el-caso-a-analizar-y-los-pasos-que-deben-seguir-para-realizar-el-análisis." class="level2">
-<h2 class="anchored" data-anchor-id="a-continuación-se-presenta-el-caso-a-analizar-y-los-pasos-que-deben-seguir-para-realizar-el-análisis.">A continuación se presenta el caso a analizar y los pasos que deben seguir para realizar el análisis.</h2>
+<section id="a-continuación-se-presenta-el-caso-a-analizar-y-los-pasos-a-seguir-para-escribir-el-reporte-a-su-jefe." class="level2">
+<h2 class="anchored" data-anchor-id="a-continuación-se-presenta-el-caso-a-analizar-y-los-pasos-a-seguir-para-escribir-el-reporte-a-su-jefe.">A continuación se presenta el caso a analizar y los pasos a seguir para escribir el reporte a su jefe.</h2>
+<p>Suponga que ustedes trabajan en un equipo de análisis de datos en una agencia de turismo en un país turístico imaginario, llamado <em>Cion</em>. Su jefe le da un archivo de datos, <a href="./trabajo/turistas.RData">turistas.RData</a>, que consiste en dos series mensuales de turistas (nacionales e internacionales) a <em>Cion</em> de enero 2002 a diciembre de 2006.</p>
+<p>En este análisis se interesa estudiar la serie de proporción de turistas internacionales, denotada por <span class="math inline">\(Z_t\)</span>, es decir:</p>
+<p><span class="math display">\[Z_t= \frac{X_t}{Y_t+X_t},\]</span></p>
+<p>donde <span class="math inline">\(X_t\)</span> es la serie de turistas internacionales y <span class="math inline">\(Y_t\)</span> es la serie de turistas nacionales.</p>
+<p>El interés en realizar pronóstico de esta serie de proporción es que los turistas nacionales hablan español y los turistas internacionales únicamente hablan inglés. Por lo tanto, su jefe le interesa predecir la proporción de turistas con el fin de considerar dicha proporción en la contratación de guías turísticos que hablan inglés.</p>
+<p>El reporte debe incluir estos detalles:</p>
+<ol type="1">
+<li><p>El análisis consiste en separar la serie en datos de entrenamiento (enero de 2002 a diciembre de 2005) y datos de prueba (2006).</p></li>
+<li><p>Realice un análisis exploratorio y la descomposición clásica más apropiada a la serie e interprete el resultado.</p></li>
+<li><p>Ajuste un modelo de regresión con tendencia y estacionalidad. Verifique y comente los supuestos de este modelo.</p></li>
+<li><p>Ajuste un modelo de suavizamiento exponencial apropiado para la serie <span class="math inline">\(Z_t\)</span>. Comente el resultado.</p></li>
+<li><p>Pronostique la proporción de turistas internacionales en el año 2006 usando la regresión del (3) y el modelo de suavizamiento exponencial de (4). ¿Cuál técnica produce mejor resultado?</p></li>
+<li><p>Interprete en término del problema y realice recomendaciones a su jefe.</p></li>
+</ol>
 </section>
 
 </main>

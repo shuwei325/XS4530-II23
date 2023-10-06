@@ -4,33 +4,43 @@ format: html
 editor: visual
 ---
 
-##
-
 ## Instrucciones y recomendaciones para la entrega del trabajo:
 
-- El objetivo de este trabajo es poner en práctica los métodos de pronósticos vistos en este curso y se permite grupo de máximo 3 integrantes.
+-   El objetivo de este trabajo es poner en práctica los métodos de pronósticos vistos en este curso y se permite grupo de máximo 4 integrantes.
 
-- La fecha de entrega es el lunes 30 de octubre a las 23:59 horas (medianoche) vía Mediación Virtual. Solamente es necesario una entrega por grupo. No se aceptarán trabajos por correo electrónico, ni por cualquier otro medio.
+-   La fecha de entrega es el lunes 30 de octubre a las 23:59 horas (medianoche) vía Mediación Virtual. Solamente es necesario una entrega por grupo. No se aceptarán trabajos por correo electrónico, ni por cualquier otro medio.
 
-- El reporte debe venir las siguientes secciones:
+-   El reporte debe venir las siguientes secciones:
 
-  1.  Resumen (abstracts)
+    1.  Introducción (Contexto del problema).
+    2.  Metodología (describir la serie, explicar las metodologías utilizadas y su justificación).
+    3.  Resultados (presentar los análisis realizados, diagnósticos y comparaciones de modelos)
+    4.  Conclusión y recomendación
 
-  2.  Introducción (incluir una descripción del trabajo y el objetivo del análisis)
+-   Recuerde que ustedes están entregando un reporte con un mensaje, asegúrense de dejar claro ese mensaje y responder la pregunta de su objetivo utilizando tablas y/o gráficos según consideren necesario.
 
-  3.  Metodología (describir la serie, explicar las metodologías utilizadas y su justificación)
+## A continuación se presenta el caso a analizar y los pasos a seguir para escribir el reporte a su jefe.
 
-  4.  Resultados y discusión (presentar los análisis realizados, diagnósticos y comparaciones de modelos)
+Suponga que ustedes trabajan en un equipo de análisis de datos en una agencia de turismo en un país turístico imaginario, llamado *Cion*. Su jefe le da un archivo de datos, [turistas.RData](./trabajo/turistas.RData), que consiste en dos series mensuales de turistas (nacionales e internacionales) a *Cion* de enero 2002 a diciembre de 2006.
 
-  5.  Conclusión
+En este análisis se interesa estudiar la serie de proporción de turistas internacionales, denotada por $Z_t$, es decir:
 
-  6.  Referencias
+$$Z_t= \frac{X_t}{Y_t+X_t},$$
 
-- Recuerde que ustedes están entregando un reporte con un mensaje, asegúrense de dejar claro ese mensaje y responder la pregunta de su objetivo utilizando tablas y/o gráficos según vea necesario.
+donde $X_t$ es la serie de turistas internacionales y $Y_t$ es la serie de turistas nacionales.
 
+El interés en realizar pronóstico de esta serie de proporción es que los turistas nacionales hablan español y los turistas internacionales únicamente hablan inglés. Por lo tanto, su jefe le interesa predecir la proporción de turistas con el fin de considerar dicha proporción en la contratación de guías turísticos que hablan inglés.
 
-## A continuación se presenta el caso a analizar y los pasos que deben seguir para realizar el análisis.
+El reporte debe incluir estos detalles:
 
+1.  El análisis consiste en separar la serie en datos de entrenamiento (enero de 2002 a diciembre de 2005) y datos de prueba (2006).
 
+2.  Realice un análisis exploratorio y la descomposición clásica más apropiada a la serie e interprete el resultado.
 
+3.  Ajuste un modelo de regresión con tendencia y estacionalidad. Verifique y comente los supuestos de este modelo.
 
+4.  Ajuste un modelo de suavizamiento exponencial apropiado para la serie $Z_t$. Comente el resultado.
+
+5.  Pronostique la proporción de turistas internacionales en el año 2006 usando la regresión del (3) y el modelo de suavizamiento exponencial de (4). ¿Cuál técnica produce mejor resultado?
+
+6.  Interprete en término del problema y realice recomendaciones a su jefe.
