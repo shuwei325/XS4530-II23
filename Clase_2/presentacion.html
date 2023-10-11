@@ -108,12 +108,46 @@ $$MSE=\frac{\sum\limits_{t=1}^T \left( Z_t-P_t \right)^2}{T} $$
 
 &lt;img src="presentacion_files/figure-html/unnamed-chunk-2-1.png" width="35%" style="display: block; margin: auto;" /&gt;
 
-- Vamos al excel y el laboratorio.
-
-- Consideraciones importantes.
-  - Selección de los valores iniciales.
+---
+# Suavizamiento exponencial simple (SES)
 
 
+
+```r
+ses1 &lt;- ses(y)
+ses1$model
+```
+
+```
+## Simple exponential smoothing 
+## 
+## Call:
+##  ses(y = y) 
+## 
+##   Smoothing parameters:
+##     alpha = 1e-04 
+## 
+##   Initial states:
+##     l = 1275.5442 
+## 
+##   sigma:  62.7718
+## 
+##      AIC     AICc      BIC 
+## 278.8813 280.0813 282.4155
+```
+
+---
+# Suavizamiento exponencial simple (SES)
+
+
+
+```r
+autoplot(ses1) +
+  autolayer(fitted(ses1), series="ajustado") +
+  ylab("defunciones") + xlab("mes")
+```
+
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-4-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -143,21 +177,65 @@ $$MSE=\frac{\sum\limits_{i=1}^T \left( Z_t-P_t \right)^2}{T} $$
 
 - Ejemplo 3.2 de Hernández (2011): Serie de graduados del ITCR de 1975-2002.
 
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-3-1.png" width="35%" style="display: block; margin: auto;" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-5-1.png" width="35%" style="display: block; margin: auto;" /&gt;
+
+
 
 ---
-# El método multiplicativo y aditivo de Holt-Winters
+# El método lineal de Holt
+
+
+```r
+holt2 &lt;- holt(y , h=5)
+holt2$model
+```
+
+```
+## Holt's method 
+## 
+## Call:
+##  holt(y = y, h = 5) 
+## 
+##   Smoothing parameters:
+##     alpha = 0.2151 
+##     beta  = 0.2149 
+## 
+##   Initial states:
+##     l = -12.771 
+##     b = 40.3513 
+## 
+##   sigma:  83.865
+## 
+##      AIC     AICc      BIC 
+## 347.0211 349.7484 353.6822
+```
+
+---
+# El método lineal de Holt
+
+
+```r
+autoplot(holt2) +
+  autolayer(fitted(holt2), series="ajustado") +
+  ylab("defunciones") + xlab("mes")
+```
+
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-7-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# El método multip. y adit. de H-W
 
 - [Winters (1960)](https://pubsonline.informs.org/doi/abs/10.1287/mnsc.6.3.324) extendió el método lineal de Holt para tomar en cuenta la estacionalidad, el cual es conocido como Holt-Winters.
 
-1. Método multiplicativo
+1. **Método multiplicativo**
   - Variación estacional cambia proporcionalmente con el nivel de la serie.
 
-2. Método aditivo
+2. **Método aditivo**
   - Variación constante a lo largo de tiempo.
 
 ---
-# El método multiplicativo de Holt-Winters
+# El método multiplicativo de H-W
 
 
 `$$l_t= \alpha \frac{Z_t}{S_{t-s}}+(1-\alpha) (l_{t-1}+b_{t-1})$$`
@@ -170,31 +248,15 @@ donde &lt;br /&gt;
 ---
 # El método multiplicativo de Holt-Winters
 
-**Valores iniciales:** para `\(s\)` periodos,&lt;br /&gt;
-- El nivel `\(l_t\)` se inicia con:
-`$$l_s=\frac{Z_1+...+Z_s}{s}$$`
-como un promedio de los datos de los primeros `\(s\)` datos.
-
-- La pendiente `\(b_t\)` se inicia con:
-`$$b_s=\frac{1}{s}\left[ \frac{Z_{s+1}-Z_1}{s}+\frac{Z_{s+2}-Z_2}{s}+...+\frac{Z_{s+s}-Z_s}{s}   \right]$$`
-`$$=\frac{1}{s}\left[ \frac{Z_{s+1}+...+Z_{s+s}}{s}-\frac{Z_{1}+...+Z_{s}}{s} \right]$$`
-como un promedio de pendientes de cada periodo en los primeros `\(2s\)` periodos.
-
----
-# El método multiplicativo de Holt-Winters
-
-- Los índices estacionales se inicializan como cociente de los primeros `\(s\)` valores al promedio de los primeros `\(s\)` datos.
-`$$S_i=\frac{Z_i}{l_s}, \text{ para } i=1,...,s$$`
-
 - Ejemplo 3.3 de Hernández (2011): Serie mensual de turistas de 1991-2000.
 
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-4-1.png" width="35%" style="display: block; margin: auto;" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-8-1.png" width="35%" style="display: block; margin: auto;" /&gt;
 
 
 ---
-# El método multiplicativo de Holt-Winters
+# El método multiplicativo de H-W
 
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-5-1.png" width="600px" height="400px" style="display: block; margin: auto;" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-9-1.png" width="600px" height="400px" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -209,21 +271,10 @@ donde &lt;br /&gt;
 `\(s\)` es la longitud de la estacionalidad, &lt;br /&gt; `\(l_t\)` es el nivel de la serie `\(Z_t\)`, &lt;br /&gt; `\(b_t\)` es la tendencia, &lt;br /&gt; `\(S_t\)` es el componente estacional, &lt;br /&gt; `\(P_{t+m}\)` es el pronóstico `\(m\)` pasos adelante y &lt;br /&gt; `\(0&lt;\alpha&lt;1\)`, `\(0&lt;\beta&lt;1\)`, `\(0&lt;\gamma&lt;1\)`.
 
 ---
-# El método aditivo de Holt-Winters
-
-- Los índices estacionales se inicializan como cociente de los primeros `\(s\)` valores al promedio de los primeros `\(s\)` datos.
-`$$S_i=Z_i-a_s, \text{ para } i=1,...,s$$`
-
-- Existen otras inicializaciones como el procedimiento basado en regresión (Bowerman, O’Connell and Koehler, 2005).
-  - asumir tendencia lineal de las primeras observaciones (típicamente 3 o 4 años), y usa el intercepto como `\(l_0\)` y pendiente como `\(b_0\)`.
-- Hasta los últimos años siguen proponiendo nuevos métodos.
-
-
----
 # El método aditivo y mult. de Holt-Winters
 
 
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-6-1.png" width="500px" height="300px" style="display: block; margin: auto;" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-10-1.png" width="500px" height="300px" style="display: block; margin: auto;" /&gt;
 
 
 RMSE del método multiplicativo: 3239.92.  
@@ -346,13 +397,13 @@ Se tienen datos de variaciones porcentuales trimestrales (tasas de crecimiento) 
 ---
 # Regresión lineal múltiple: Ejemplo
 
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-7-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-11-1.png" width="60%" style="display: block; margin: auto;" /&gt;
 
 
 ---
 # Regresión lineal múltiple: Ejemplo
 
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-8-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-12-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 ```
 ## 
@@ -431,7 +482,7 @@ Se tienen datos de variaciones porcentuales trimestrales (tasas de crecimiento) 
 Vamos a ajustar un modelo de tendencia cuadrática a la serie de graduados de ITCR de 1975 a 2002:
   `$$Y_t=\beta_0+\beta_1 t +\beta_2 t^2 + \epsilon_t, t=1,...,T$$`
 
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-9-1.png" width="45%" style="display: block; margin: auto;" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-13-1.png" width="45%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -474,11 +525,11 @@ F-statistic: 210.6 on 2 and 25 DF,  p-value: 2.268e-16
 # Modelos de tendencia
 
 .pull-left[
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-11-1.png" width="100%" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-15-1.png" width="100%" /&gt;
 ]
 
 .pull-right[
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-12-1.png" width="100%" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-16-1.png" width="100%" /&gt;
 ]
 
 ---
@@ -489,7 +540,7 @@ F-statistic: 210.6 on 2 and 25 DF,  p-value: 2.268e-16
   - Homoscedasticidad
   - Autocorrelación en el tiempo
 
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-13-1.png" width="35%" style="display: block; margin: auto;" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-17-1.png" width="35%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -512,7 +563,7 @@ durbinWatsonTest(mod)
 
 ```
  lag Autocorrelation D-W Statistic p-value
-   1       0.1488158      1.576164   0.106
+   1       0.1488158      1.576164   0.098
  Alternative hypothesis: rho != 0
 ```
 
@@ -520,7 +571,7 @@ durbinWatsonTest(mod)
 # Modelos de tendencia
 
 
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-15-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-19-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 ```
 ## 
@@ -552,7 +603,7 @@ Transformaciones usadas en la práctica:
 .pull-left[
 Sin transformación `\((Y_t)\)`
 
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-16-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-20-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ]
 
@@ -561,15 +612,20 @@ Sin transformación `\((Y_t)\)`
 Con transformación `\((\ln Y_t)\)`
 
 
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-17-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-21-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ]
 
 ---
-# Modelos de series estacionales mediante variables indicadoras
+# Modelos de series estacionales
 
 - La idea es utilizar un factor (variables indicadoras) como predictor para indicar el periodo de la estacionalidad.
 - Ejemplo de turistas (datos mensuales y con tendencia cuadrática)
+
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-22-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+
+---
+# Modelos de series estacionales
 
 `$$ln Y_t=\alpha_0+\alpha_1 t + \alpha_2 t^2 +\beta_1 I_{1}+...+\beta_11 I_{11}+\epsilon_t$$` 
 
@@ -595,7 +651,7 @@ mes12        -0.1042     0.0325  -3.2068   0.0018
 ---
 # Modelos de series estacionales mediante variables indicadoras
 
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-19-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-24-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 
 
