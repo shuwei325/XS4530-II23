@@ -49,7 +49,6 @@ ses1$fitted #valores ajustados
 ses1$residuals #residuos
 ```
 
-
 ```{r}
 ses1 <- ses(y,h=12)
 names(ses1)
@@ -87,8 +86,6 @@ autoplot(holt1) +
   ylab("defunciones") + xlab("mes")
 ```
 
-
-
 # Método multiplicativo de Holt-Winters
 
 ```{r}
@@ -118,40 +115,6 @@ accuracy(ht1)
 accuracy(ht2)
 ```
 
-# Modelo de Regresión
-
-Cambios porcentuales trimestrales (tasas de crecimiento) del gasto de consumo personal real (Y) e ingresos disponibles(X), para EE.UU. desde 1970 a 2016.
-
-```{r}
-data(uschange)
-
-autoplot(uschange[,1:5], facets = TRUE, colour=TRUE) +
-  ylab("") + xlab("Year") +
-  guides(colour="none")
-
-uschange %>%
-  as.data.frame() %>%
-  GGally::ggpairs()
-
-mod0 <- lm(
-  Consumption ~ Income + Production + Unemployment + Savings,
-  data=uschange)
-summary(mod0)
-
-mod0 <- tslm(
-  Consumption ~ Income + Production + Unemployment + Savings,
-  data=uschange)
-summary(mod0)
-
-
-autoplot(uschange[,'Consumption'], series="Data") +
-  forecast::autolayer(fitted(mod0), series="Fitted") +
-  xlab("Year") + ylab("") +
-  ggtitle("Cambio porcentual de gastos de consumo en EE.UUU ") +
-  guides(colour=guide_legend(title=" "))
-
-checkresiduals(mod0)
-```
 
 # Modelos de tendencia
 

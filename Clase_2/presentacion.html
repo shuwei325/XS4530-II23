@@ -281,188 +281,6 @@ RMSE del método multiplicativo: 3239.92.
 RMSE del método aditivo: 4297.824.   
 
 ---
-# Regresión aplicada a series cronológicas
-
-- La idea es ajustar un modelo de regresión para la serie temporal `\(Y_t, t=1,...,T\)` utlizando un conjunto de `\(p\)` covariables: `\(X_1,...,X_p\)`.
-
-- Por ejemplo: 
-  - `\(Y\)` una serie mensual de ventas con la variable independiente `\(X_1\)` gasto mensual en anuncios.
-  - `\(Y\)` una serie diaria de demanda de energía eléctrica con las variables independientes: `\(X_1\)` temperatura y `\(X_2\)` el día de la semana.
-
-
----
-# Regresión lineal múltiple
-
-- La forma general de un modelo de regresión lineal múltiple es:
-
-`$$Y_t=\beta_0+\beta_1 X_{t,1}+\beta_2 X_{t,2}+...+\beta_p X_{t,p}+\epsilon_t, t=1,...,T,$$` 
-
-donde `\(Y_t\)` es la variable a pronosticar y `\(X_1,...,X_p\)` son los `\(p\)` variables predictoras. Las variables predictoras pueden ser numéricas o categóricas (con el manejo apropiado de factores).   
-Los coeficientes `\(\beta_1,...,\beta_p\)` miden el efecto de cada predictor después de tener en cuenta los efectos de todos los demás predictores del modelo. Por lo tanto, los coeficientes miden los efectos marginales de las variables predictoras.
-
-
----
-# Regresión lineal múltiple
-
-- El modelo de regresión lineal múltiple en su forma matricial:
-
-$$
-Y=X \beta+\epsilon
-$$
-donde
-
-`$$Y=\left[ \begin{array}{c}Y_1 \\ \vdots \\Y_T \end{array}  \right],~~ X= \left(\begin{array}{ccccc} 1&amp; X_{11}&amp; X_{12} &amp; ... &amp; X_{1p}\\ 1 &amp;  X_{21}&amp; X_{22} &amp; ... &amp;X_{2p}\\ \vdots&amp; \vdots &amp; \ddots &amp;\vdots&amp; \vdots\\ 1&amp;  X_{T1}&amp; X_{T2} &amp; ... &amp;X_{Tp} \end{array}\right),$$`
-`$$\beta=\left[ \begin{array}{c}\beta_0 \\ \vdots \\\beta_T \end{array}  \right],~~\epsilon=\left[ \begin{array}{c}\epsilon_1 \\ \vdots \\\epsilon_T \end{array}  \right].$$` 
-
----
-# Regresión lineal múltiple
-
-
-**Supocisiones del modelo:**
-
-- La relación entre la variable de pronóstico y las variables predictoras satisface esta ecuación lineal.
-
-- Los errores `\(\varepsilon_1,...,\varepsilon_T\)`:
-  - tienen media cero,
-  - no están autocorrelacionados,
-  - no están relacionados con las variables predictoras
-
-- Los errores se distribuyan normalmente con una varianza constante `\(\sigma^2\)`.
-
-- Cada predictor `\(X_i, i=1,...,p\)` supone que es observado y fijo, i.e. no es una variable aleatoria.
-
----
-# Regresión lineal múltiple
-
-**Tópicos importantes:**
-
-1. Estimación:
-  - por mínimos cuadrados.
-  - por máxima verosimilitud.
-  
-2. Selección de variables
-
-3. Diagnósticos
-
-4. Medidas remediales
-
----
-# Regresión lineal múltiple: Ejemplo 
-
-Se tienen datos de variaciones porcentuales trimestrales (tasas de crecimiento) del consumo personal real (Y), ingresos, producción industrial, ahorros personales y tasa de desempleo, para EE.UU. desde 1970 a 2016.
-
-
-&lt;img src="presentacion_files/figure-html/MultiPredictors-1.png" width="60%" style="display: block; margin: auto;" /&gt;
-
-
----
-# Regresión lineal múltiple: Ejemplo
-
-&lt;div class="figure" style="text-align: center"&gt;
-&lt;img src="presentacion_files/figure-html/ScatterMatrix-1.png" alt="Matriz de diagrama de dispersión del gasto de consumo de EE. UU. y los cuatro predictores." width="50%" /&gt;
-&lt;p class="caption"&gt;Matriz de diagrama de dispersión del gasto de consumo de EE. UU. y los cuatro predictores.&lt;/p&gt;
-&lt;/div&gt;
-
-
----
-# Regresión lineal múltiple: Ejemplo
-
-
-```
-## 
-## Call:
-## tslm(formula = Consumption ~ Income + Production + Unemployment + 
-##     Savings, data = uschange)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.88296 -0.17638 -0.03679  0.15251  1.20553 
-## 
-## Coefficients:
-##              Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)   0.26729    0.03721   7.184 1.68e-11 ***
-## Income        0.71449    0.04219  16.934  &lt; 2e-16 ***
-## Production    0.04589    0.02588   1.773   0.0778 .  
-## Unemployment -0.20477    0.10550  -1.941   0.0538 .  
-## Savings      -0.04527    0.00278 -16.287  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 0.3286 on 182 degrees of freedom
-## Multiple R-squared:  0.754,	Adjusted R-squared:  0.7486 
-## F-statistic: 139.5 on 4 and 182 DF,  p-value: &lt; 2.2e-16
-```
-
-
----
-# Regresión lineal múltiple: Ejemplo
-
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-11-1.png" width="60%" style="display: block; margin: auto;" /&gt;
-
-
----
-# Regresión lineal múltiple: Ejemplo
-
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-12-1.png" width="50%" style="display: block; margin: auto;" /&gt;
-
-```
-## 
-## 	Breusch-Godfrey test for serial correlation of order up to 8
-## 
-## data:  Residuals from Linear regression model
-## LM test = 14.874, df = 8, p-value = 0.06163
-```
-
-
----
-# Regresión espuria
-
-- Cuando las series no son estacionarias, los resultados de regresión no son confiables y presenta lo que se llama correlación espuria.
-
-- Los datos de las series cronológicas de tendencias pueden parecer relacionados.
-- Por ejemplo, los pasajeros aéreos en Australia tienen una correlación positiva con la producción de arroz en Guinea.
-
-&lt;img src="presentacion_files/figure-html/spurious-1.png" width="350px" height="250px" style="display: block; margin: auto;" /&gt;
-
----
-# Regresión espuria
-
-
-```
-## 
-## Call:
-## tslm(formula = aussies ~ guinearice)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -5.9448 -1.8917 -0.3272  1.8620 10.4210 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)   -7.493      1.203  -6.229 2.25e-07 ***
-## guinearice    40.288      1.337  30.135  &lt; 2e-16 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 3.239 on 40 degrees of freedom
-## Multiple R-squared:  0.9578,	Adjusted R-squared:  0.9568 
-## F-statistic: 908.1 on 1 and 40 DF,  p-value: &lt; 2.2e-16
-```
-
----
-# Regresión espuria
-
-&lt;img src="presentacion_files/figure-html/tslm_mult2-1.png" width="300px" height="300px" style="display: block; margin: auto;" /&gt;
-
-```
-## 
-## 	Breusch-Godfrey test for serial correlation of order up to 8
-## 
-## data:  Residuals from Linear regression model
-## LM test = 28.813, df = 8, p-value = 0.000342
-```
-
----
 # Modelos de tendencia
 
 - Como las variables independiente son asumidas como fijas, se puede utilizar el tiempo como una variable independiente.
@@ -482,7 +300,7 @@ Se tienen datos de variaciones porcentuales trimestrales (tasas de crecimiento) 
 Vamos a ajustar un modelo de tendencia cuadrática a la serie de graduados de ITCR de 1975 a 2002:
   `$$Y_t=\beta_0+\beta_1 t +\beta_2 t^2 + \epsilon_t, t=1,...,T$$`
 
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-13-1.png" width="45%" style="display: block; margin: auto;" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-11-1.png" width="45%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -525,11 +343,11 @@ F-statistic: 210.6 on 2 and 25 DF,  p-value: 2.268e-16
 # Modelos de tendencia
 
 .pull-left[
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-15-1.png" width="100%" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-13-1.png" width="100%" /&gt;
 ]
 
 .pull-right[
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-16-1.png" width="100%" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-14-1.png" width="100%" /&gt;
 ]
 
 ---
@@ -540,7 +358,7 @@ F-statistic: 210.6 on 2 and 25 DF,  p-value: 2.268e-16
   - Homoscedasticidad
   - Autocorrelación en el tiempo
 
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-17-1.png" width="35%" style="display: block; margin: auto;" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-15-1.png" width="35%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -563,7 +381,7 @@ durbinWatsonTest(mod)
 
 ```
  lag Autocorrelation D-W Statistic p-value
-   1       0.1488158      1.576164   0.098
+   1       0.1488158      1.576164   0.116
  Alternative hypothesis: rho != 0
 ```
 
@@ -571,7 +389,7 @@ durbinWatsonTest(mod)
 # Modelos de tendencia
 
 
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-19-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-17-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 ```
 ## 
@@ -603,7 +421,7 @@ Transformaciones usadas en la práctica:
 .pull-left[
 Sin transformación `\((Y_t)\)`
 
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-20-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-18-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ]
 
@@ -612,7 +430,7 @@ Sin transformación `\((Y_t)\)`
 Con transformación `\((\ln Y_t)\)`
 
 
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-21-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-19-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ]
 
@@ -622,7 +440,7 @@ Con transformación `\((\ln Y_t)\)`
 - La idea es utilizar un factor (variables indicadoras) como predictor para indicar el periodo de la estacionalidad.
 - Ejemplo de turistas (datos mensuales y con tendencia cuadrática)
 
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-22-1.png" width="70%" style="display: block; margin: auto;" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-20-1.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 ---
 # Modelos de series estacionales
@@ -651,7 +469,7 @@ mes12        -0.1042     0.0325  -3.2068   0.0018
 ---
 # Modelos de series estacionales mediante variables indicadoras
 
-&lt;img src="presentacion_files/figure-html/unnamed-chunk-24-1.png" width="50%" style="display: block; margin: auto;" /&gt;
+&lt;img src="presentacion_files/figure-html/unnamed-chunk-22-1.png" width="50%" style="display: block; margin: auto;" /&gt;
 
 
 
