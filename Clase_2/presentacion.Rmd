@@ -404,7 +404,7 @@ autoplot(log(y))
 - La idea es utilizar un factor (variables indicadoras) como predictor para indicar el periodo de la estacionalidad.
 - Ejemplo de turistas (datos mensuales y con tendencia cuadrática)
 
-```{r echo=FALSE, out.width = "70%", fig.align="center"}
+```{r echo=FALSE, out.width = "50%", fig.align="center"}
 turistas<-read.csv("turistas.csv",sep=";")
 y<-ts(turistas$turistas,start=c(1991,1),frequency=12)
 autoplot(y) 
